@@ -1,0 +1,285 @@
+% !TEX encoding = Windows Cyrillic
+\documentclass[12pt]{article}
+\pagestyle{plain}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd,array,graphicx}
+\usepackage{amsthm}
+ 
+
+\usepackage[T2A]{fontenc}
+\usepackage[cp1251]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{mathtools}
+\usepackage{cmap}
+\usepackage{hyperref}
+
+\usepackage[left=3cm,right=3cm, top=3cm, bottom=3cm, bindingoffset=0cm]{geometry}
+
+\DeclareMathOperator*{\argmax}{argmax}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Задача}
+\newtheorem{defin}{Определение}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Теорема}
+\newtheorem{propos}[theorem]{Утверждение}
+\newtheorem{cor}[theorem]{Следствие}
+\newtheorem{lem}[theorem]{Лемма}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{quest}[theorem]{Вопрос}
+
+\title{Асимптотическая оптимальность}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Описание модели}
+Пусть $(\Omega, \mathcal{F}, \mathsf{P})$ -- вероятностное пространство. Пусть $\mathbb{F} = \{ \mathcal{F}_t, t \in \mathbb{Z}_+ \}$ -- фильтрация этого вероятностного пространства, характеризующая общее состояние рынка в момент времени $t = 0, 1, \dots$. Пусть на финансовом рынке существует $n$ активов. Каждый актив характеризуется величиной $A_t^k (\omega)$ -- доходом на единицу вложенных средств за временной отрезок ($t-1, t]$. Процесс $(A_t = (A_t^1, \dots , A_t^n),  ~ t \geq 1)$ согласован с фильтрацией $\mathbb{F}$. Будем предполагать, что для любых $\omega \in \Omega$ и $t \geq 1$ выполнется:
+\begin{equation} \label{eq7}
+ A_t^k (\omega) > 0.
+\end{equation}
+
+Положим $\Lambda = \{\lambda \in \mathbb{R}^n : \lambda^1 + \dots + \lambda^n = 1,  ~\forall i ~ \lambda^i \geq 0\}$ -- множество всевозможных вариантов распределения инвестором собственного капитала по активам ($\lambda$ -- вектор долей). Пусть $\lambda_t : \Omega \rightarrow \Lambda$ -- вектор-функция, показывающая как инвестор будет распределять свой капитал в момент времени $t$ при событии $\omega$. Пусть последовательность функций $\lambda(\omega) = \{ \lambda_t(\omega), t \geq 0\}$ является предсказуемой относительно фильтрации $\mathbb{F}$. Тогда назовём $\lambda(\omega)$ \textit{инвестиционной стратегией}.
+
+При выбранной инвестиционной стратегии $\lambda$ и начальном капитале $X_0 ~(X_0 \in \mathbb{R}, X_0 > 0)$ капитал инвестора в момент времени $t = 1, 2, \dots$ будет рекурсивно определяться как:
+\begin{equation} \label{eq8}
+X_{t} = \langle \lambda_{t-1}, A_{t} \rangle X_{t-1},
+\end{equation}
+где $\langle \lambda_{t-1}, A_t \rangle = \sum\limits_{k=1}^n \lambda_{t-1}^k A_{t}^k$ -- скалярное произведение, которое показывает, какое количество денег получит инвестор на каждую вложенную денежную единицу в момент $t$, действуя по инвестиционной стратегии $\lambda(\omega)$.
+
+Из выражений \eqref{eq7} и \eqref{eq8} следует, что $X_t(\omega) > 0 ~\forall~ t$.
+
+Наш основной интерес составляют те инвестиционные стратегии, которые будут гарантировать наискорейший (асимптотически) рост капитала. Для этого введём несколько определений.
+
+\begin{defin}
+Назовём инвестиционную стратегию $\lambda^*$ \textit{логоптимальной}, если для любой стратегии $\lambda$ выполняется:
+\begin{equation*}
+\mathsf E(\ln\frac{X_{t+1}^{\lambda}}{X_{t+1}^{\lambda^*}} \mid \mathcal{F}_t ) \leq \ln\frac{X_{t}^{\lambda}}{X_{t}^{\lambda^*}}.
+\end{equation*} 
+%То есть, $\ln\frac{X_{t}^{\lambda}}{X_{t}^{\lambda^*}}$ -- супермартингал.
+\end{defin}
+
+\begin{defin}
+Назовём инвестиционную стратегию $\lambda^*$ \textit{асимптотически оптимальной}, если её скорость роста выше скорости роста любой другой стратегии $\lambda$:
+\begin{equation*}
+\varlimsup\limits_{t \rightarrow \infty}  \frac{1}{t}  \ln X_{t}^{\lambda}  \leq \varlimsup\limits_{t \rightarrow \infty} \frac{1}{t}  \ln X_{t}^{\lambda^*}
+\end{equation*}
+или иначе:
+\begin{equation*}
+\varlimsup\limits_{t \rightarrow \infty} ( \frac{1}{t} \cdot \ln\frac{X_{t}^{\lambda}}{X_{t}^{\lambda^*}} ) \leq 0.
+\end{equation*}
+\end{defin}
+
+
+\section{Существование логоптимальной стратегии}
+Для начала введём вспомогательные понятия, которые понадобятся в ходе доказательства.
+
+\begin{defin}
+\textit{Соответствие} $\varphi: X \twoheadrightarrow Y$ из множества $X$ в множество $Y$ сопоставляет каждому значению $x \in X$ подмножество $\varphi(x) \subset Y$. 
+\end{defin}
+
+\begin{defin}
+Пусть $(S, \Sigma) -$ измеримое пространство и пусть $X$ и $Y -$ топологические пространства. Назовём функцию $f: S \times X \rightarrow Y$ \textit{функцией Каратеодори}, если:
+
+1) Для каждого $x \in X$ функция $f^x = f(\cdot, x) S \rightarrow Y ~~(\Sigma, \mathcal{B}_Y)$-измерима.
+
+2) Для каждого $s \in S$ функция $f_s = f(s, \cdot): X \rightarrow Y$ непрерывна. 
+\end{defin}
+
+\begin{defin}
+\textit{Измеримой выборочной функцией} из соответствия $\varphi: S \twoheadrightarrow X$ между измеримыми пространствами назовём измеримую функцию $f: S \rightarrow X$ такую, что $f(s) \in \varphi(s)$ для каждого $s \in S$.
+\end{defin}
+
+\begin{theorem}\label{th2} (Measurable Maximum Theorem, D.Aliprantis, C.Border ''Infinite Dimensional Analysis'', Theorem 18.19)
+
+Пусть $X -$ сепарабельное метрическое компактное пространство и $(S, \Sigma)$ -- измеримое пространство. Пусть $f: S \times X \rightarrow \mathbb{R}$ -- функция Каратеодори. Определим действительную функцию $m: S \rightarrow \mathbb{R}$ как:
+\begin{equation*}
+m(s) = \max\limits_{x \in X} f(s, x)
+\end{equation*}
+и соответствие $\mu: S \twoheadrightarrow X$ как:
+\begin{equation*}
+\mu(s) = \{x \in X : f(s,x) = m(s) \}.
+\end{equation*}
+
+Тогда:
+
+1) Действительная функция $m(s)$ измерима.
+
+2) Соответствие $\mu(s)$ имеет непустые и компактные значения.
+
+3) Соответствие $\mu(s)$ измеримо и допускает существование измеримой выборочной функции.
+
+\end{theorem}
+
+Теперь приступим непосредственно к основной теореме.
+
+\begin{theorem} \label{th1}
+Логоптимальная стратегия $\lambda^*$ существует.
+\end{theorem}
+
+\begin{proof}
+Необходимо доказать, что существует стратегия $\lambda^*$, такая что $\ln\frac{X_{t+1}^{\lambda}}{X_{t+1}^{\lambda^*}}$ - супермартингал. Для этого достаточно показать, что:
+
+\begin{equation} \label{eq1}
+\mathsf{E}(\ln\frac{X_{t+1}^{\lambda}}{X_{t}^{\lambda}} \mid \mathcal{F}_t) - \mathsf{E}(\ln\frac{X_{t+1}^{\lambda^*}}{X_{t}^{\lambda^*}} \mid \mathcal{F}_t) \leq 0
+\end{equation}
+
+Будем искать логоптимальную стратегию в виде
+
+\begin{equation}
+\lambda^*(\omega) = \argmax_{\lambda(\omega)}\mathsf{E}(\ln\frac{X_{t+1}^{\lambda}}{X_{t}^{\lambda}} \mid \mathcal{F}_t) =\argmax_{\lambda(\omega)} \mathsf{E}(\ln\sum\limits_{k=1}^n \lambda_{t+1}^k A_{t+1}^k \mid \mathcal{F}_t)
+\end{equation}
+
+Для того, чтобы существование математического ожидания из предыдущей формулы не вызывало сомнения, нормируем случайный вектор $A_t$. Введём случайные величины
+\begin{equation*}
+R_{t}^k = \frac{A_{t}^k}{\sum\limits_{i=1}^n A_t^i}
+\end{equation*}
+
+Далее, преобразуем выражение из неравенства \eqref{eq1}:
+\begin{equation*}
+\begin{aligned}
+\mathsf{E}(\ln\frac{X_{t+1}^{\lambda}}{X_{t}^{\lambda}} - \ln\frac{X_{t+1}^{\lambda^*}}{X_{t}^{\lambda^*}} \mid \mathcal{F}_t) = \mathsf{E}(\ln\frac{X_{t+1}^{\lambda}}{X_{t}^{\lambda}} \cdot \frac{X_{t}^{\lambda^*}}{X_{t+1}^{\lambda^*}} \mid \mathcal{F}_t) = \mathsf{E}(\ln\frac{\sum\limits_{k=1}^n \lambda_{t+1}^k A_{t+1}^k}{ \sum\limits_{k=1}^n \lambda_{t+1}^{*k} A_{t+1}^k} \mid \mathcal{F}_t) = \\
+= \mathsf{E}(\ln\frac{\sum\limits_{k=1}^n \lambda_{t+1}^k A_{t+1}^k / \sum\limits_{i=1}^n A_{t+1}^i}{ \sum\limits_{k=1}^n \lambda_{t+1}^{*k} A_{t+1}^k / \sum\limits_{i=1}^n A_{t+1}^i} \mid \mathcal{F}_t) = \mathsf{E}(\ln\frac{\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k}{ \sum\limits_{k=1}^n \lambda_{t+1}^{*k} R_{t+1}^k} \mid \mathcal{F}_t) = \\
+= \mathsf{E}(\ln\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k \mid \mathcal{F}_t) - \mathsf{E}( \ln\sum\limits_{k=1}^n \lambda_{t+1}^{*k} R_{t+1}^k \mid \mathcal{F}_t)
+\end{aligned}
+\end{equation*}
+
+Определим логоптимальную стратегию как:
+\begin{equation} \label{eq4}
+\lambda^*(\omega) = \argmax_{\lambda} ~\mathsf{E}(\ln\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k \mid \mathcal{F}_t) (\omega)
+\end{equation}
+Все величины $R_{t+1}^k$ можно оценить сверху: $R_{t+1}^k \leq 1$. К тому же, всегда существует $k'$, т.ч. $\lambda^{k'}_{t+1} R^{k'}_{t+1} > 0$. Тогда:
+\begin{equation*}
+-\infty < \ln\lambda^{k'}_{t+1}R^{k'}_{t+1} \leq \ln\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k \leq \ln \sum\limits_{k=1}^n \lambda_{t+1}^k = \ln 1 = 0
+\end{equation*}
+
+Следовательно, $\mathsf{E} |\ln\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k| < \infty$ и условное ожидание из формулы \eqref{eq4} существует. Преобразуем:
+
+\begin{equation} \label{eq3}
+\begin{aligned}
+\mathsf{E}(\ln\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k \mid \mathcal{F}_t) = \mathsf{E}(\ln\sum\limits_{k=1}^n \lambda_{t+1}^k R_{t+1}^k \mid \mathcal{F}_t)(\omega) = ~~~~~~~~~~~~~\\
+= \int\limits_{[0,1]^n} \ln\sum\limits_{k=1}^n \lambda_{t+1}^k r^k \cdot \mathsf{P}_t(\omega, dr),
+\end{aligned}
+\end{equation}
+где $\mathsf{P}_t(\omega, dr)$ - условное распределение вектора $R_{t+1}$ при условии $\mathcal{F}_t$.
+Для каждого фиксированного $\omega$ в уравнении \eqref{eq3} мы имеем интеграл от выпуклой вверх функции от $\lambda$, поэтому сам интеграл - тоже выпуклая функция от $\lambda$. Следовательно, существует её максимум $\lambda^*$. Объединяя результаты по всем $\omega$, получаем, что существует стратегия $\lambda^*(\omega)$, удовлетворяющая условию логоптимальности.
+
+Теперь докажем, что функцию $\lambda^*(\omega)$ всегда можно выбрать так, чтобы она была измеримой. Введём обозначения:
+\begin{equation*}
+f(\omega, \lambda) = \int\limits_{S} \ln\sum\limits_{k=1}^n \lambda_{t+1}^k r^k \mathsf{P}(\omega, dr), ~\text{где}~ S = \{x \in [0,1]^n : x^1 + \dots x^n = 1 \}
+\end{equation*}
+\begin{equation*}
+m(\omega) = \max\limits_{\lambda \in \Lambda} f(\omega, \lambda), ~~M(\omega) = \{ \lambda \in \Lambda : f(\omega, \lambda) = m(\omega)\}
+\end{equation*}
+\begin{equation*}
+\lambda^*(\omega) = \argmax\limits_{\lambda \in \Lambda} f(\omega, \lambda)
+\end{equation*}
+
+и удостоверимся, что функции в нашей ситуации полностью удовлетворяют утверждению теоремы об измеримом максимуме (Measurable Maximum Theorem).
+
+$\Lambda = \{x \in \mathbb{R}^n : x^1 + \dots + x^n = 1,  ~\forall i ~ x^i \geq 0\}$ -- компакт на гиперплоскости в $\mathbb{R}^n$ -- очевидно, является сепарабельным метрическим пространством (метрика индуцирована с $\mathbb{R}^n, \Lambda \cap \mathbb{Q}^n$ -- счётное всюду плотное множество).
+
+$(\Omega, \mathcal{F})$ -- измеримое пространство.
+
+$f(\omega, \lambda) : \Omega \rightarrow \Lambda$ -- функция Каратеодори, т.к. для любого фиксированного $\lambda \in \Lambda$ она, как функция $\omega$, измерима в силу определения условного математического ожидания. Для любого фиксированного $\omega \in \Omega$ она, как функция $\lambda$, непрерывна в силу теоремы Лебега о мажорируемой сходимости.
+
+Тогда по пункту 3) \hyperref[th2]{Теоремы} об Измеримом Максимуме существует измеримая выборочная функция $\lambda^*(\omega) $ из соответствия $M(\omega)$.
+
+\end{proof}
+
+\section{Существование асимптотически оптимальной стратегии}
+
+\begin{theorem}
+Логоптимальная стратегия является также и асимптотически оптимальной.
+\end{theorem}
+
+\begin{proof}
+Пусть $\lambda^*$ - логоптимальная стратегия. Тогда $\ln\frac{X_t^{\lambda}}{X_t^{\lambda^*}} ~$ -- супермартингал. Достаточно доказать, что он ограничен сверху, тогда условие асимптотической оптимальности почти автоматически выполнено. Для этого ограничим его сверху: 
+
+\begin{equation}
+\ln\frac{X_t^{\lambda}}{X_t^{\lambda^*}} \leq \ln(1+ \frac{X_t^{\lambda}}{X_t^{\lambda^*}}) = \ln\frac{X_t^{\lambda} + X_t^{\lambda^*}}{X_t^{\lambda^*}}
+\end{equation}
+Докажем, что $\ln\frac{X_t^{\lambda} + X_t^{\lambda^*}}{X_t^{\lambda^*}}$ - супермартингал. Для простоты будем в дальнейшем писать $\mathsf{E}(\cdot \mid \mathcal{F}_{t} ) = \mathsf{E}_{t}(\cdot)$. 
+
+\begin{equation*}
+\begin{aligned}
+\mathsf{E}_{t-1}\ln\frac{X_t^{\lambda} + X_t^{\lambda^*}}{X_t^{\lambda^*}} = \mathsf{E}_{t-1} \Bigl [ \ln\frac{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda^*}} - \ln \langle R_t, \lambda_{t-1}^* \rangle + \\
++ \ln \Bigl ( \langle R_t, \lambda_{t-1} \rangle \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} +  \langle R_t, \lambda_{t-1}^* \rangle \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \Bigr ] = \\
+= \ln\frac{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda^*}} + \mathsf{E}_{t-1} \ln \Bigl ( \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) 
+\end{aligned}
+\end{equation*}
+
+Достаточно показать, что 
+\begin{equation} \label{ineq10}
+\mathsf{E}_{t-1} \ln \Bigl ( \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \leq 0
+\end{equation}
+
+Разобьём это математическое ожидание на 2 части индикатором:
+\begin{equation*}
+\mathsf{E}_{t-1} \ln \Bigl ( \cdot \Bigr ) = \mathsf{E}_{t-1} \ln \Bigl ( \cdot \Bigr )\mathbb{I}\{\frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle}  \leq 1\} + \mathsf{E}_{t-1} \ln \Bigl ( \cdot \Bigr )\mathbb{I}\{\frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle}  \geq 1\}
+\end{equation*}
+
+Теперь оценим обе части:
+
+\begin{equation*}
+\begin{aligned}
+\boldsymbol{1)}~ \mathsf{E}_{t-1} \ln \Bigl ( \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \mathbb{I}\{\frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle}  \leq 1\} \leq \\
+\leq  \mathsf{E}_{t-1} \ln \Bigl ( 1 \cdot \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \mathbb{I}\{\frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle}  \leq 1\} \leq \\
+\leq \mathsf{E}_{t-1} \ln \Bigl ( 1 \cdot \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \cdot 1 = \mathsf{E}_{t-1} \ln \Bigl (\frac{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}}  \Bigr ) = 0
+\end{aligned}
+\end{equation*}
+
+\begin{equation*}
+\begin{aligned}
+\boldsymbol{2)}~ \mathsf{E}_{t-1} \ln \Bigl ( \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \mathbb{I}\{\frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle}  \geq 1\} \leq \\
+\leq \mathsf{E}_{t-1} \ln \Bigl ( \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} + \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \frac{X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) \cdot 1 \leq \\
+\leq \mathsf{E}_{t-1} \ln \Bigl ( \frac{\langle R_t, \lambda_{t-1} \rangle}{\langle R_t, \lambda_{t-1}^* \rangle} \cdot \frac{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda} + X_{t-1}^{\lambda^*}} \Bigr ) =  \mathsf{E}_{t-1} \ln \langle R_t, \lambda_{t-1} \rangle - \mathsf{E}_{t-1} \ln \langle R_t, \lambda_{t-1}^* \rangle 
+\end{aligned}
+\end{equation*}
+
+В силу того, что $\ln\frac{X_t^{\lambda}}{X_t^{\lambda^*}}$ - супермартингал, имеем:
+\begin{equation*}
+\mathsf{E}_{t-1} \ln\frac{X_t^{\lambda}}{X_t^{\lambda^*}} \leq \ln\frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda^*}} = \mathsf{E}_{t-1} \ln\frac{X_{t-1}^{\lambda}}{X_{t-1}^{\lambda^*}} 
+\end{equation*}
+
+\begin{equation*}
+\mathsf{E}_{t-1} \ln X_t^{\lambda} - \mathsf{E}_{t-1} \ln X_t^{\lambda^*} \leq \mathsf{E}_{t-1} \ln X_{t-1}^{\lambda} - \mathsf{E}_{t-1} \ln X_{t-1}^{\lambda^*}
+\end{equation*}
+
+\begin{equation*}
+\mathsf{E}_{t-1} \ln X_t^{\lambda} - \mathsf{E}_{t-1} \ln X_{t-1}^{\lambda} \leq \mathsf{E}_{t-1} \ln X_{t}^{\lambda^*} - \mathsf{E}_{t-1} \ln X_{t-1}^{\lambda^*}
+\end{equation*}
+
+\begin{equation*}
+\mathsf{E}_{t-1} \ln\frac{X_t^{\lambda}}{X_{t-1}^{\lambda}} \leq \mathsf{E}_{t-1} \ln\frac{X_{t}^{\lambda^*}}{X_{t-1}^{\lambda^*}}
+\end{equation*}
+
+\begin{equation*}
+\mathsf{E}_{t-1} \ln \frac{\langle R_t, \lambda_{t-1} \rangle X_{t-1}^{\lambda}}{X_{t-1}^{\lambda}} \leq \mathsf{E}_{t-1} \ln \frac{\langle R_t, \lambda_{t-1}^* \rangle X_{t-1}^{\lambda^*}}{X_{t-1}^{\lambda^*}}
+\end{equation*}
+
+\begin{equation*}
+\mathsf{E}_{t-1} \ln \langle R_t, \lambda_{t-1} \rangle - \mathsf{E}_{t-1} \ln \langle R_t, \lambda_{t-1}^* \rangle \leq 0
+\end{equation*}
+
+Таким образом, неравенство \ref{ineq10} доказано, и $\ln\frac{X_t^{\lambda} + X_t^{\lambda^*}}{X_t^{\lambda^*}}$ - супермартингал. Что важно, супермартингал неотрицательный:
+
+\begin{equation*}
+\ln\frac{X_t^{\lambda} + X_t^{\lambda^*}}{X_t^{\lambda^*}} = \ln(1+\frac{X_t^{\lambda}}{X_t^{\lambda^*}}) \geq \ln 1 = 0
+\end{equation*}
+
+Одно из следствий теоремы Дуба - неотрицательный супермартингал сходится почти наверное, то есть существует конечная случайная величина $A_{\infty} = \lim\limits_{t \rightarrow \infty}\ln\frac{X_{t}^{\lambda} + X_{t}^{\lambda^*}}{X_{t}^{\lambda^*}}$. Отсюда:
+
+\begin{equation*}
+\varlimsup\limits_{t \rightarrow \infty} ( \frac{1}{t} \cdot \ln\frac{X_{t}^{\lambda}}{X_{t}^{\lambda^*}} ) \leq \varlimsup\limits_{t \rightarrow \infty} ( \frac{1}{t} \cdot \ln\frac{X_{t}^{\lambda} + X_{t}^{\lambda^*}}{X_{t}^{\lambda^*}} ) = \frac{A_{\infty}}{\lim\limits_{t \rightarrow \infty} t} = 0,
+\end{equation*}
+
+то есть стратегия $\lambda^*$ асимптотически оптимальна.
+
+\end{proof}
+
+\end{document}
