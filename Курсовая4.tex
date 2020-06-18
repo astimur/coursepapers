@@ -1,0 +1,371 @@
+\documentclass[a4paper,12pt, russian]{article}
+\pagestyle{plain}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+ 
+\usepackage[cp1251]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{hyperref}
+\usepackage[left=3cm,right=3cm, top=3cm, bottom=3cm, bindingoffset=0cm]{geometry}
+
+\DeclareMathOperator*{\argmax}{argmax}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Задача}
+\newtheorem{defin}{Определение}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Теорема}
+\newtheorem{propos}[theorem]{Утверждение}
+\newtheorem{cor}[theorem]{Следствие}
+\newtheorem{lem}[theorem]{Лемма}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{quest}[theorem]{Вопрос}
+
+\begin{document}
+
+\begin{center}
+\hfill \break
+\footnotesize{ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ}\\ 
+\footnotesize{УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ}\\
+\small{\textbf{«МОСКОВСКИЙ ГОСУДАРСТВЕННЫЙ УНИВЕРСИТЕТ}}\\
+\small{\textbf{имени М.В.ЛОМОНОСОВА»}}\\
+\hfill \break
+\normalsize{МЕХАНИКО-МАТЕМАТИЧЕСКИЙ ФАКУЛЬТЕТ}\\
+ \hfill \break
+\normalsize{КАФЕДРА ТЕОРИИ ВЕРОЯТНОСТЕЙ}\\
+\hfill\break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\large{КУРСОВАЯ РАБОТА}\\
+\hfill \break
+\hfill \break
+\textbf{Асимптотически оптимальные стратегии в модели рынка}\\
+\textbf{с конкуренцией и двумя типами активов}\\
+\end{center}
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+\hfill \break
+
+{\raggedleft 
+Выполнил студент 4 курса \\
+409 академической группы \\
+\textbf{Асылхузин Тимур Ринатович} \\
+}
+\hfill \break
+\hfill \break
+{\raggedleft 
+Научный руководитель: \\
+к.ф.-м.н. \textbf{Житлухин Михаил Валентинович} \\
+}
+\begin{center}
+\hfill \break
+\hfill \break
+\hfill \break
+Москва\\
+2020
+\end{center}
+\thispagestyle{empty} % выключение отображение номера для этой страницы
+
+
+\section{Модель}
+Пусть $(\Omega, \mathcal{F}, \mathsf{P})$ -- вероятностное пространство. Пусть $\mathbb{F} = \{ \mathcal{F}_t, t \in \mathbb{Z}_+ \}$ -- фильтрация этого вероятностного пространства, характеризующая общее состояние рынка в моменты времени $t = 0, 1, \dots$. Пусть на финансовом рынке есть $N$ активов, выплаты которых пропорциональны вложенной инвестором сумме, и $K$ активов, доходность которых не зависят от вложенной суммы. Каждый актив первого типа характеризуется величиной $X_t^n (\omega)$ -- суммарной выплатой средств за временной промежуток ($t-1, t]$, а каждый актив второго типа величиной $Z_t^n (\omega)$ -- доходом на единицу вложенных средств за ($t-1, t]$. Процессы $\{X_t = (X_t^1, \dots , X_t^N)\}_{t \geq 1}$ и $\{Z_t = (Z_t^1, \dots , Z_t^K) \}_{t \geq 1}$ согласованы с фильтрацией $\mathbb{F}$. 
+
+В рамках данной работы будем рассматривать ситуацию с двумя инвесторами, капиталы которых в момент времени $t$ обозначаются как $Y_t$ и $\widetilde{Y}_t$. Суммарный капитал $W_t = Y_t + \widetilde{Y}_t$. Будем предполагать, что начальные капиталы $Y_0$ и $\widetilde{Y}_0$ известны заранее, положительны и неслучайны. Положим
+\begin{flalign*}
+\Lambda = \{\lambda \in \mathbb{R}^n : \lambda^1 + \dots + \lambda^N \leq 1,  ~\forall n ~ \lambda^n \geq 0\}, \\
+M = \{\mu \in \mathbb{R}^n : \mu^1 + \dots + \mu^K = 1,  ~\forall k ~ \mu^k \geq 0\},
+\end{flalign*}
+где $\Lambda$ -- множество всевозможных вариантов распределения первым инвестором собственного капитала по активам первого типа, а $M$ -- множество вариантов распределения оставшейся части капитала $(1 - \sum_{n = 1}^{N} \lambda^n)$ по активам второго типа ($\lambda$ и $\mu$ -- вектора долей). 
+Пусть $\lambda_t (\omega, c) : \Omega \times \mathbb{R}_+ \rightarrow \Lambda$ и $\mu_t (\omega, c) : \Omega \times \mathbb{R}_+ \rightarrow M$ -- вектор-функции, показывающие как инвестор будет распределять свой капитал в момент времени $t-1$ при событии $\omega$ и суммарном капитале инвесторов $c$. Дополнительно потребуем, чтобы при любом $t \geq 1$ cлучайные функции $\lambda_t, \mu_t$ были измеримы относительно $\sigma$-алгебры $\mathcal{F}_{t-1} \otimes \mathcal{B}(\mathbb{R}_+)$. Тогда назовём пару ($\lambda(\omega, c)$, $\mu(\omega, c)$) \textit{инвестиционной стратегией}. 
+
+Аналогично определяется инвестиционная стратегия второго инвестора, которую будем обозначать ($\widetilde{\lambda}(\omega, c)$, $\widetilde{\mu}(\omega, c)$). В дальнейшем в тех местах, где это не будет приводить к замешательству, зависимость величин от аргументов будем опускать. Для удобства изложения для векторов $a = (a^1, \dots, a^K), ~b = (b^1, \dots, b^K)$ введём обозначения
+\begin{equation*}
+| a | = \sum\limits_{k = 1}^K a^k, ~~ a \cdot b = \sum\limits_{k=1}^{K} a^k b^k.
+\end{equation*}
+При введённых обозначениях в актив первого типа под номером $n$ в момент времени $t-1$ будет вложена часть капитала $\lambda_t^n Y_{t-1}$, а в актив второго типа под номером $k$: $(1 - |\lambda_t|)\mu_t^k Y_{t-1}$. Но стратегия зависит также и от суммарного капитала инвесторов, поэтому определим последовательности капиталов рекуррентно:
+\newline
+\newline
+$t = 0:$ $Y_0$ и $\widetilde{Y}_0$ известны и неслучайны. Тогда $W_0 = Y_0 + \widetilde{Y}_0$ и
+\begin{flalign*}
+\lambda_1(\omega) = \lambda_1(\omega, W_0), ~\widetilde{\lambda}_1(\omega) = \widetilde{\lambda}_1(\omega, W_0),  ~\mu_1(\omega) = \mu_1(\omega, W_0), ~\widetilde{\mu}_1(\omega) = \widetilde{\mu}_1(\omega, W_0).
+\end{flalign*}
+Произвольный момент времени $t$:
+\begin{flalign*}
+Y_t(\omega) = \sum\limits_{k=1}^K (1 - |\lambda_t(\omega)|)\mu_t^k(\omega) Y_{t-1}(\omega) Z_t^k(\omega) + \sum\limits_{n=1}^N \frac{\lambda_t^n(\omega) Y_{t-1}(\omega)}{\lambda_t^n(\omega) Y_{t-1}(\omega) + \widetilde{\lambda}_t^n(\omega) \widetilde{Y}_{t-1}(\omega)} X_t^n(\omega), \\
+\widetilde{Y}_t(\omega) = \sum\limits_{k=1}^K (1 - |\widetilde{\lambda}_t(\omega)|)\tilde{\mu}_t^k(\omega) \widetilde{Y}_{t-1}(\omega) Z_t^k(\omega) + \sum\limits_{n=1}^N \frac{\widetilde{\lambda}_t^n(\omega) \widetilde{Y}_{t-1}(\omega)}{\lambda_t^n(\omega) Y_{t-1}(\omega) + \widetilde{\lambda}_t^n(\omega) \widetilde{Y}_{t-1}(\omega)} X_t^n(\omega).
+\end{flalign*}
+Тогда $W_t(\omega) = Y_t(\omega) + \widetilde{Y}_t(\omega)$ и можем найти значения $\lambda, \mu$ для следующего этапа: 
+\begin{flalign*}
+\lambda_{t+1}(\omega) = \lambda_{t+1}(\omega, W_t(\omega)), ~\mu_{t+1}(\omega) = \mu_{t+1}(\omega, W_t(\omega)).
+\end{flalign*}
+\begin{defin}
+Случайные величины $\lambda_{t+1}(\omega) = \lambda_{t+1}(\omega, W_{t}(\omega)), ~\mu_{t+1}(\omega) = \mu_{t+1}(\omega, W_{t}(\omega))$ будем называть \textit{реализациями} стратегии ($\lambda(\omega, c)$, $\mu(\omega, c)$).
+\end{defin}
+В дальнейшем будем работать только с реализациями стратегий, и там, где это не будет вести к неоднозначности, будем опускать зависимость от аргументов. 
+\begin{defin}
+Для доли инвестора на рынке в момент времени $t$ введём следующее обозначение:
+\begin{equation*}
+r_t = \frac{Y_t}{W_t}.
+\end{equation*}
+\end{defin}
+
+\begin{defin}
+Если для стратегии $(\lambda, \mu)$ первого инвестора при любых начальных капиталов $Y_0, \widetilde{Y}_0 > 0$ и стратегии $(\widetilde{\lambda}(\omega), \widetilde{\mu}(\omega))$ второго инвестора выполняется, что:
+
+1) $r_t$ -- субмартингал, то назовём стратегию $(\lambda, \mu)$ \textit{оптимальной},
+
+2) $\ln r_t$ - субмартингал, то назовём стратегию $(\lambda, \mu)$ \textit{логоптимальной}.
+\end{defin}
+
+\begin{propos}
+Из логоптимальности стратегии следует оптимальность.
+\end{propos}
+\begin{proof}
+По определению логоптимальной стратегии,
+\begin{flalign*}
+E(\ln r_{t} | \mathcal{F}_{t-1}) \geq \ln r_{t-1} ~~\Leftrightarrow~~ E(\ln \frac{r_{t}}{r_{t-1}} | \mathcal{F}_{t-1}) \geq 0.
+\end{flalign*}
+Логарифм - вогнутая функция. Применяя неравенство Йенсена для условного математического ожидания, получаем
+\begin{flalign*}
+0 \leq E(\ln \frac{r_{t}}{r_{t-1}} | \mathcal{F}_{t-1}) \leq \ln E(\frac{r_{t}}{r_{t-1}} | \mathcal{F}_{t-1}).
+\end{flalign*}
+Взяв экспоненту от правой и левой частей неравенства выше, получаем требуемое условие для оптимальности.
+\end{proof}
+
+
+\section{Оптимальная стратегия}
+Далее займёмся поиском логоптимальной стратегии в нашей постановке задачи. Выясняется, что если распределять капитал по активам частями, в некотором смысле пропорциональными их выплатам, то удаётся достичь оптимальности. 
+\newline
+\newline
+Основным результатом работы является следующая теорема.
+\begin{theorem}
+Инвестиционная стратегия $(\lambda, \mu)$, реализации которой задаются формулами
+\begin{equation*}
+\lambda_t = E( \frac{X_t^n}{\zeta_t \mu_t \cdot Z_t + |X_t|} | \mathcal{F}_{t-1} ), ~~~~\mu_t = \frac{a_t}{|a_t|},
+\end{equation*}
+\begin{flalign*}
+~\text{где}~ &\zeta_t = |a_t| W_{t-1}, \\
+&a_t = \argmax\limits_a \left \{ E_{t-1} \ln(\frac{a \cdot Z_t + \frac{|X_t|}{W_{t-1}}}{|Z_t| + \frac{|X_t|}{W_{t-1}}}) - |a| ~~\Bigr|~~ |a| \leq 1,~ a^k \geq 0, ~k = \overline{1, K} \right \},~~~~~~~~~~~~~~~
+\end{flalign*}
+является логоптимальной.
+\end{theorem}
+Следующий раздел посвящён доказательству этой теоремы.
+
+
+
+\section{Доказательство оптимальности}
+Сначала докажем несколько вспомогательных утверждений, которые понадобятся в ходе доказательства.
+
+\begin{lem}\label{Jensen}
+(Дискретное неравенство Йенсена) Пусть функция $f(x)$ является выпуклой на некотором множестве $\mathcal {X}$ и числа $q_{1},q_{2},\dots ,q_{n}$ таковы, что
+\begin{flalign*}
+q_{1},q_{2},\dots ,q_{n} > 0 ~\text{и}~ q_{1} + q_{2} + \dots + q_{n} = 1.
+\end{flalign*}
+Тогда каковы бы ни были числа $x_{1},x_{2},\ldots ,x_{n}$ из множества $\mathcal {X}$, выполняется неравенство:
+\begin{equation*}
+f\left(\sum _{i=1}^{n}q_{i}x_{i}\right) \leq \sum_{i=1}^{n}q_{i}f(x_{i}).
+\end{equation*}
+Для вогнутой функции, соответственно, выполняется неравенство в другую сторону.
+\end{lem}
+
+\begin{lem}\label{log_ineq}
+Для любого $a > 0$ выполняется: 
+\begin{equation*}
+\ln a \geq 1 - \frac{1}{a}.
+\end{equation*}
+\end{lem}
+\begin{proof}
+Рассмотрим производные функций $f(a) = \ln a$ и $g(a) = 1 - \frac{1}{a}$:
+\begin{equation*}
+f'(a) = \frac{1}{a}, ~~ g'(a) = \frac{1}{a^2}.
+\end{equation*}
+В точке a = 1 значения функций, как и значения производных, в точности совпадают. При $a > 1:~ f'(a) > g'(a)$. При $a < 1:~ f'(a) < g'(a)$. То есть при движении направо функция $f$ растёт быстрее $g$, а при движении влево убывает медленнее. Следовательно на всём промежутке $(0; +\infty)$ значение функции $f$ не меньше значения функции $g$.
+\end{proof}
+
+\begin{lem}\label{ineq_alpha}
+Пусть $\alpha, \beta \in \mathbb{R}_+^N$ -- два вектора, т.ч. $|\alpha|, |\beta| \leq 1$ и для любого $n$ выполняется: если $\beta^n = 0$, то и $\alpha^n = 0$. Тогда
+\begin{equation*}
+\alpha \cdot (\ln \alpha - \ln \beta) \geq \frac{ \| \alpha - \beta \|^2}{4} + |\alpha| - |\beta|,
+\end{equation*}
+где при $\alpha^n = 0$ положим $\alpha^n(\ln \alpha^n - \ln \beta^n) = 0$.
+\end{lem}
+\begin{proof}
+Используя, что $\ln x \leq 2(\sqrt{x} - 1)$ для любого $x > 0$, мы получим
+\begin{flalign*}
+\alpha \cdot (\ln \alpha - \ln \beta) &= - \sum\limits_{n: \alpha^n \neq 0} \alpha^n \ln(\beta^n/\alpha^n) \geq 2 \sum\limits_{n} (\alpha^n - \sqrt{\alpha^n\beta^n}) = \\
+&= \sum\limits_n (\sqrt{\alpha^n} - \sqrt{\beta^n}) + |\alpha| - |\beta|.
+\end{flalign*}
+Далее, используя неравенство $(\sqrt{x} - \sqrt{y})^2 \geq (x-y)^2/4$, которое справедливо для любых $x, y \in [0, 1]$, получаем требуемое утверждение.
+\end{proof}
+
+\begin{defin}
+\textit{Соответствие} $\varphi: X \twoheadrightarrow Y$ из множества $X$ в множество $Y$ сопоставляет каждому значению $x \in X$ подмножество $\varphi(x) \subset Y$. 
+\end{defin}
+\begin{defin}
+\textit{Селектором} из соответствия $\varphi: S \twoheadrightarrow X$ между двумя множествами назовём функцию $f: S \rightarrow X$ такую, что $f(s) \in \varphi(s)$ для каждого $s \in S$.
+\end{defin}
+\begin{theorem}\label{meas_max}
+(Об измеримом селекторе) Пусть $(\Omega, \mathcal{F})$ -- измеримое пространство, $L$ -- сепарабельное метрическое пространство. Функция $f(\omega, l): \Omega \times L \rightarrow \mathbb{R}$ такова, что при любом фиксированном $\omega$ она непрерывна по $l$ и при любом фиксированном $l$ измерима по $\omega$ (является функцией Каратеодори). Также заданы
+\begin{flalign*}
+m(\omega) &= \max\limits_{l \in L} f(\omega, l), \\
+\mu(\omega) &= \{l \in L: ~f(\omega, l) = m(\omega) \}.
+\end{flalign*}
+Тогда функция $m$ измерима и существует измеримый селектор $l^*(\omega)$ из соответствия $\mu$.
+\end{theorem}
+
+
+Теперь приступим к доказательству основной теоремы.
+\begin{proof}
+Чтобы облегчить изложение, введём вспомогательные обозначения:
+\begin{flalign*}
+F_t^n = \frac{\lambda_t^n}{\lambda_t^n r_{t-1} + \widetilde{\lambda}_t ^n (1 - r_{t-1})}, ~~\widetilde{F}_t^n = \frac{\widetilde{\lambda}_t^n}{\lambda_t^n r_{t-1} + \widetilde{\lambda}_t ^n (1 - r_{t-1})}.
+\end{flalign*}
+Тогда уравнение последовательности капитала первого инвестора перепишется в виде
+\begin{flalign*}
+Y_t = Y_{t-1} \left((1 - |\lambda_t|)\mu_t \cdot Z_t + \frac{F_t \cdot X_t}{W_{t-1}} \right).
+\end{flalign*}
+Для того, чтобы явно выразить отношение $r_t / r_{t-1}$, распишем несколько промежуточных этапов: 
+\begin{flalign*}
+& W_t = Y_t + \widetilde{Y}_t = Y_{t-1} \left((1 - |\lambda_t|)\mu_t \cdot Z_t + \frac{F_t \cdot X_t}{W_{t-1}} \right) + \widetilde{Y}_{t-1} \left((1 - |\widetilde{\lambda}_t|)\widetilde{\mu}_t \cdot Z_t + \frac{\widetilde{F}_t \cdot X_t}{W_{t-1}} \right) = &\\
+&= r_{t-1} W_{t-1} (1 - |\lambda_t|)\mu_t \cdot Z_t + (1 - r_{t-1}) W_{t-1} (1 - |\widetilde{\lambda}_t|)\widetilde{\mu}_t \cdot Z_t + r_{t-1} F_t \cdot X_t + (1 - r_{t-1}) \widetilde{F}_t \cdot X_t = &\\
+&= W_{t-1} \left ( r_{t-1} (1 - |\lambda_t|)\mu_t \cdot Z_t + (1 - r_{t-1}) (1 - |\widetilde{\lambda}_t|)\widetilde{\mu}_t \cdot Z_t +  \frac{r_{t-1} F_t \cdot X_t}{W_{t-1}} + \frac{(1 - r_{t-1}) \widetilde{F}_t \cdot X_t}{W_{t-1}} \right) = &\\
+&= W_{t-1} \left ( (r_{t-1} (1 - |\lambda_t|)\mu_t + (1 - r_{t-1}) (1 - |\widetilde{\lambda}_t|)\widetilde{\mu}_t) \cdot Z_t +  \frac{|X_t|}{W_{t-1}} \right), &
+\end{flalign*}
+так как $(r_{t-1}F_t + (1 - r_{t-1})\widetilde{F}_t) \cdot X_t = 1 \cdot X_t = |X_t|$. Тогда
+
+\begin{flalign*}
+\frac{r_{t}}{r_{t-1}} = \frac{Y_{t}}{Y_{t-1}} \cdot \frac{W_{t-1}}{W_{t}} = \frac{(1 - |\lambda_t|)W_{t-1} \mu_t \cdot Z_t + F_t \cdot X_t}{(r_{t-1} (1 - |\lambda_t|)\mu_t W_{t-1} + (1 - r_{t-1}) (1 - |\widetilde{\lambda}_t|)\widetilde{\mu}_t W_{t-1}) \cdot Z_t +  |X_t|} = \\
+= \frac{\zeta_t \mu_t \cdot Z_t + F_t \cdot X_t}{r_{t-1} \zeta_t\mu_t \cdot Z_t+ (1 - r_{t-1}) \widetilde{\zeta}_t\widetilde{\mu}_t \cdot Z_t +  |X_t|},
+\end{flalign*}
+где $\zeta_t = (1 - |\lambda_t|) W_{t-1}$, $\widetilde{\zeta}_t = (1 - |\widetilde{\lambda}_t|) W_{t-1}$.
+\newline
+\newline
+Следовательно,
+\begin{flalign*}
+\ln \frac{r_{t}}{r_{t-1}} &= \ln \frac{\zeta_t \mu_t \cdot Z_t + F_t \cdot X_t}{r_{t-1} \zeta_t\mu_t \cdot Z_t+ (1 - r_{t-1}) \widetilde{\zeta}_t\widetilde{\mu}_t \cdot Z_t +  |X_t|} = \\
+&= \ln \left( \frac{\zeta_t \mu_t \cdot Z_t + F_t \cdot X_t}{\zeta_t \mu_t \cdot Z_t + |X_t|} \right ) + \ln \left ( \frac{\zeta_t \mu_t \cdot Z_t + |X_t|}{r_{t-1} \zeta_t\mu_t \cdot Z_t+ (1 - r_{t-1}) \widetilde{\zeta}_t\widetilde{\mu}_t \cdot Z_t +  |X_t|} \right ).
+\end{flalign*}
+По Лемме \ref{Jensen}:
+\begin{flalign*}
+\ln \left( \frac{\zeta_t \mu_t \cdot Z_t + F_t \cdot X_t}{\zeta_t \mu_t \cdot Z_t + |X_t|} \right ) = \ln \left(\frac{\zeta_t \mu_t \cdot Z_t }{\zeta_t \mu_t \cdot Z_t + |X_t|} \cdot 1 + \sum\limits_{n=1}^{N} \frac{X_t^n}{\zeta_t \mu_t \cdot Z_t + |X_t|} \cdot F_t^n \right ) \geq \\
+\geq \frac{\zeta_t \mu_t \cdot Z_t }{\zeta_t \mu_t \cdot Z_t + |X_t|} \cdot \ln 1 + \sum\limits_{n=1}^{N} \frac{X_t^n}{\zeta_t \mu_t \cdot Z_t + |X_t|} \cdot \ln F_t^n = \frac{X_t \cdot \ln F_t}{\zeta_t \mu_t \cdot Z_t + |X_t|}.
+\end{flalign*}
+По Лемме \ref{log_ineq}:
+\begin{flalign*}
+\ln \left ( \frac{\zeta_t \mu_t \cdot Z_t + |X_t|}{r_{t-1} \zeta_t\mu_t \cdot Z_t+ (1 - r_{t-1}) \widetilde{\zeta}_t\widetilde{\mu}_t \cdot Z_t +  |X_t|} \right ) \geq \frac{(1 - r_{t-1})(\zeta_t \mu_t -  \widetilde{\zeta}_t\widetilde{\mu}_t)\cdot Z_t}{\zeta_t \mu_t \cdot Z_t + |X_t|}.
+\end{flalign*}
+Используя неравенство выше, для логарифма отношения долей получаем:
+\begin{flalign}\label{ln}
+\ln \frac{r_t}{r_{t-1}} \geq \frac{\ln F_t \cdot X_t}{\zeta_t \mu_t \cdot Z_t + |X_t|} + \frac{(1 - r_{t-1})(\zeta_t \mu_t -  \widetilde{\zeta}_t\widetilde{\mu}_t)\cdot Z_t}{\zeta_t \mu_t \cdot Z_t + |X_t|}.
+\end{flalign}
+Попробуем взять доли капитала для первого типа активов как
+\begin{flalign*}
+\lambda_t^n = E( \frac{X_t^n}{\zeta_t \mu_t \cdot Z_t + |X_t|} | \mathcal{F}_{t-1} ).
+\end{flalign*}
+В дальнейшем для сокращения записи будем использовать $E_{t} = E(~\cdot~| \mathcal{F}_{t} )$.
+
+
+Оценим первое слагаемое в \eqref{ln}. Используя предсказуемость процесса $F_t$ и лемму \ref{ineq_alpha} получаем
+\begin{flalign*}
+E_{t-1} \frac{\ln F_t \cdot X_t}{\zeta_t \mu_t \cdot Z_t + |X_t|} = \lambda_t \cdot \ln F_t = \sum\limits_{n = 1}^{N} \lambda_t^n \ln \frac{\lambda_t^n}{\lambda_t^n r_{t-1} + \widetilde{\lambda}_t ^n (1 - r_{t-1})} \geq \\
+\geq \frac{1}{4}(1 - r_{t-1})^2 \|\lambda_t - \widetilde{\lambda}_t \|^2 + (1 - r_{t-1})(|\lambda_t| - |\widetilde{\lambda}_t|).
+\end{flalign*}
+Для необходимой нам оценки достаточно доказать, что для второго слагаемого в выражении \eqref{ln} выполняется: 
+\begin{flalign*}
+E_{t-1}\frac{(\zeta_t \mu_t -  \widetilde{\zeta}_t\widetilde{\mu}_t)\cdot Z_t}{\zeta_t \mu_t \cdot Z_t + |X_t|} \geq - (|\lambda_t| - |\widetilde{\lambda}_t|) = \frac{\zeta_t - \widetilde{\zeta_t}}{W_{t-1}}.
+\end{flalign*}
+Введём обозначения:
+\begin{flalign*}
+a_t = \frac{\zeta_t}{W_{t-1}}\mu_t, ~~\widetilde{a}_t = \frac{\widetilde{\zeta}_t}{W_{t-1}}\widetilde{\mu}_t, ~~V_t = \frac{|X_t|}{W_{t-1}}.
+\end{flalign*}
+Здесь $|a_t| \leq 1, ~|\widetilde{a}_t| \leq 1$. Тогда предыдущее неравенство эквивалентно следующему:
+\begin{flalign*}
+E_{t-1}\frac{(a_t -  \widetilde{a_t})\cdot Z_t}{a_t \cdot Z_t + V_t} \geq |a_t| - |\widetilde{a}_t|.
+\end{flalign*}
+Для дальнейших вычислений временно опустим индекс $t$. В силу предсказуемости процессов $a$ и $\widetilde{a}$ имеем
+\begin{flalign*}
+E_{t-1}\frac{(a -  \widetilde{a})\cdot Z}{a \cdot Z + V} \geq |a| - |\widetilde{a}| ~~\Leftrightarrow~~ a \cdot \left ( E_{t-1}\frac{Z}{a \cdot Z + V} - 1 \right ) + \widetilde{a} \cdot \left ( 1 - E_{t-1}\frac{Z}{a \cdot Z + V} \right ) \geq 0.
+\end{flalign*}
+Для выполнения этого неравенства достаточно найти $\mathcal{F}_{t-1}$-измеримый процесс $a$, такой что для каждого $k$ выполняется:
+\begin{equation}\label{main_equation}
+E_{t-1}\frac{Z^k}{a \cdot Z + V} = 1 ~~\text{или}~~ (E_{t-1}\frac{Z^k}{a \cdot Z + V} < 1 ~\text{и}~ a^k = 0).
+\end{equation}
+Рассмотрим задачу
+\begin{equation}\label{max}
+\begin{cases}
+E_{t-1} \ln(a \cdot Z + V) - |a| ~\longrightarrow~ \max\limits_a, \\
+|a| \leq 1; ~~a^k \geq 0, ~k = 1, \dots, K.
+\end{cases}
+\end{equation}
+Распишем ожидание из первого выражения
+\begin{flalign*}
+\left (E_{t-1} \ln(a \cdot Z + V) \right )(\omega)= \int\limits_{\mathbb{R}^K \times \mathbb{R}_+} \ln( \sum\limits_{k = 1}^{K} a^k z^k + v) P_t(\omega, dz, dv),
+\end{flalign*}
+где $P_t(\omega, dz, dv)$ -- регулярная версия совместного распределения $(Z, V)$ при условии $\mathcal{F}_{t-1}$. Тогда, если взглянуть на это выражение как на функцию от $a$ при фиксированном $\omega$, мы получим обыкновенный интеграл Лебега. Интеграл от непрерывной по $a$ функции сам является непрерывной функцией по $a$. Ограничения на $a$ в \eqref{max} образуют компакт, следовательно, по теореме Вейерштрасса существует максимум функции на компакте. Взяв аргумент, на котором достигается максимум и объединив результаты по всем $\omega$, получаем необходимую нам функцию, которую назовём $a^*$. Описанная только что ситуация полностью удовлетворяет условию теоремы \ref{meas_max}: благодаря регулярности условного распределения, максимизируемая функция является функцией Каратеодори (измерима относительно $\mathcal{F}_{t-1}$), пространство  $\mathbb{R}^K$ сепарабельно, а множество $\{ a \in \mathbb{R}^K:~|a| \leq 1; ~~a^k \geq 0, ~k = 1, \dots, K \}$ компактно. Существование функции $m(\omega)$ тоже доказано. Следовательно, существует \textbf{измеримая} относительно $\mathcal{F}_{t-1}$ функция $a^*$, максимизирующая задачу \eqref{max}.
+\newline
+Будем считать, что $|Z| \leq 1, V \leq 1$ п.н. Если это не так, то могут возникнуть проблемы с существованием ожидания в \eqref{max}. В общем случае вычтем из максимизируемого выражения $E_{t-1} \ln(|Z| + V)$. На задачу максимизации это не повлияет, потому что нет зависимости от $a$, зато выражение под знаком математического ожидания будет ограничено сверху единицей.
+\newline
+\newline
+Теперь посмотрим на задачу \eqref{max} с другой стороны. Это гладкая задача вариационного исчисления с ограничениями типа равенств и неравенств, и $a^*$ доставляет её максимум. Ограничений типа равенств в нашем случае нет, ограничения типа неравенств перепишем как: 
+\begin{flalign*}
+&|a| - 1 \leq 0, \\
+&-a^k \leq 0.
+\end{flalign*}
+Тогда функция Лагранжа для этой задачи выглядит следующим образом: 
+\begin{equation*}
+L(a) = -l^0(E_{t-1} \ln(a \cdot Z + V) - |a|) + \sum l^k (-a^k) + u(|a| - 1),
+\end{equation*}
+где $(l^0, \dots, l^k, u)$ -- множители Лагранжа.
+\newline
+По теореме о необходимых условиях максимума первого порядка существуют множители Лагранжа, такие что:
+\begin{equation}\label{varis}
+\begin{aligned}
+&1)~ \triangledown L (a^*) = 0, \\
+&2)~ l^k \geq 0, ~k = \overline{1, K},\\
+&3)~ u \geq 0, \\
+&4)~ l^k a^{*k} = 0, ~k = \overline{1, K}, \\
+&5)~ u(|a^*| - 1) = 0.
+\end{aligned}
+\end{equation}
+Производная по Фреше в случае функции нескольких переменных является просто градиентом, а множитель $l^0$ благодаря отсутствию ограничений типа равенств считаем равным единице.
+\newline
+Распишем первое условие:
+\begin{equation}\label{deriv}
+\frac{\partial L}{\partial a^k}\Bigr|_{a^*} =  -E_{t-1}\frac{Z^k}{a^* \cdot Z + V} + 1 - l^k + u = 0, ~k = \overline{1, K}.
+\end{equation}
+Заметим, что в данной задаче $|a^*| < 1$, то есть неравенство строгое. Предположим противное: $|a^*| = 1$. Рассмотрим функцию
+\begin{equation*}
+f(\alpha) = E_{t-1} \ln(\alpha a^* \cdot Z + V) - \alpha, ~\alpha \in [0,1].
+\end{equation*}
+Тогда её производная равняется 
+\begin{equation*}
+f'(\alpha) = E_{t-1}\frac{a^* \cdot Z}{\alpha a^* \cdot Z + V} - 1 = E_{t-1}\frac{a^* \cdot Z}{\alpha a^* \cdot Z + V} - |a^*|.
+\end{equation*}
+Если $P(V > 0) > 0$, то $f'(1) < 0$, что невозможно в силу того, что $a^*$ - экстремум этой функции по $a$. Следовательно, $|a^*| < 1$, и из \eqref{varis} следует, что $u = 0$, и уравнение \eqref{deriv} превращается в
+\begin{equation*}
+E_{t-1}\frac{Z^k}{a^* \cdot Z + V} = 1 - l^k, ~k = \overline{1, K},
+\end{equation*}
+причём если $l^k > 0$, то $a^{*k} = 0$, что также следует из \eqref{varis}.
+\newline
+\newline
+Тем самым, найден процесс $a^*$, который удовлетворяет условию \eqref{main_equation}, то есть при $a_t = a^*$ стратегия будет логоптимальной. Остаётся только от $a_t$ перейти обратно к $\mu_t$. Из равенства $a_t = \frac{\zeta_t}{W_{t-1}} \mu_t$ и $|\mu_t| = 1$ получаем $\zeta_t = |a_t| W_{t-1}$, следовательно,
+\begin{equation*}
+\mu_t = \frac{a_t}{|a_t|}.
+\end{equation*}
+Доказательство завершено.
+\end{proof}
+
+
+\end{document}
